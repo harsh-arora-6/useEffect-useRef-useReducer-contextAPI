@@ -12,9 +12,17 @@ const Login = (props) => {
   const [formIsValid, setFormIsValid] = useState(false);
   // we use useEffect whenever we want to include effects based on some change like here based on enteredEmail,enteredPassword
   useEffect(()=>{
-    setFormIsValid(
-      enteredEmail.includes('@') && enteredPassword.trim().length > 6
-    );
+    const identifier = setTimeout(()=>{
+      console.log('check validity');
+      setFormIsValid(
+        enteredEmail.includes('@') && enteredPassword.trim().length > 6
+      );
+    },500);
+    // clean up function which executes before every useEffect execution except the first execution
+    return ()=>{
+      console.log('clean up')
+      clearTimeout(identifier);
+    }
   },[enteredEmail,enteredPassword])
   const emailChangeHandler = (event) => {
     setEnteredEmail(event.target.value);
