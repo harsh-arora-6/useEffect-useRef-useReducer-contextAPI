@@ -1,8 +1,9 @@
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useContext, useEffect, useReducer, useState } from 'react';
 
 import Card from '../UI/Card/Card';
 import classes from './Login.module.css';
 import Button from '../UI/Button/Button';
+import AuthContext from '../../store/auth-context';
 
 // The state that reducer gets is the latest snapshot of the state.
 const emailReducer = (state,action)=>{
@@ -23,7 +24,7 @@ const passwordReducer = (state,action)=>{
   }
   return {val:'',valid:false}
 }
-const Login = (props) => {
+const Login = () => {
   // const [enteredEmail, setEnteredEmail] = useState('');
   // const [emailIsValid, setEmailIsValid] = useState();
   const [emailState,emailDispatch] = useReducer(emailReducer,{val:'',valid:null})
@@ -34,6 +35,7 @@ const Login = (props) => {
 
   const {valid:emailIsValid} = emailState;
   const {valid:passwordIsValid} = passwordState;
+  const authCtx = useContext(AuthContext);
   // we use useEffect whenever we want to include effects based on some change like here based on enteredEmail,enteredPassword
   useEffect(()=>{
     const identifier = setTimeout(()=>{
@@ -70,7 +72,7 @@ const Login = (props) => {
 
   const submitHandler = (event) => {
     event.preventDefault();
-    props.onLogin(emailState.val, passwordState.val);
+    authCtx.onLogin(emailState.val, passwordState.val);
   };
 
   return (
